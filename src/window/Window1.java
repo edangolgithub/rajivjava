@@ -10,11 +10,13 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
 
 public class Window1 {
 
 	private JFrame frame;
 	private final JButton btnNewButton_2 = new JButton("New button");
+	private JTextField numtxt;
 
 	/**
 	 * Launch the application.
@@ -56,14 +58,34 @@ public class Window1 {
 		JButton btnNewButton_1 = new JButton("New button");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null, "hello you cliocked button2");
+				try {
+				int a= Integer.parseInt(numtxt.getText());
+				
+				
+				if(a%2==0)
+				{
+					JOptionPane.showMessageDialog(null, "even");
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "odd");
+				}
+			}catch(NumberFormatException ex)
+				{
+				JOptionPane.showMessageDialog(null, "check input only numbers alowed");
+				}
 			}
 		});
-		btnNewButton_1.setBounds(113, 232, 89, 23);
+		btnNewButton_1.setBounds(260, 144, 89, 23);
 		frame.getContentPane().add(btnNewButton_1);
 		btnNewButton_2.addActionListener(new Sfds());
 			
 		btnNewButton_2.setBounds(88, 81, 120, 31);
 		frame.getContentPane().add(btnNewButton_2);
+		
+		numtxt = new JTextField();
+		numtxt.setBounds(260, 81, 272, 52);
+		frame.getContentPane().add(numtxt);
+		numtxt.setColumns(10);
 	}
 }

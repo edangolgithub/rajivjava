@@ -5,10 +5,10 @@ import javax.swing.JFrame;
 
 public class NewFrame {
 
-	public static void main(String[] args) {
+	public static void call() {
 		
 		
-		JFrame frame= new JFrame();
+		JFrame frame= new JFrame("new java window");
 		frame.setBounds(0, 0, 400, 400);
 		JButton b= new JButton();
 		frame.setLayout(null);
