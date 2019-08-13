@@ -12,12 +12,14 @@ import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
+import javax.swing.JTabbedPane;
+import javax.swing.JPanel;
 
 public class Controls1 {
 
 	private JFrame frame;
-	private JTextField textField;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -51,119 +53,60 @@ public class Controls1 {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(10, 11, 629, 537);
+		frame.getContentPane().add(tabbedPane);
+		
+		JPanel panel = new JPanel();
+		tabbedPane.addTab("New tab", null, panel, null);
+		panel.setLayout(null);
+		
+		JButton button = new JButton("New button");
+		button.setBounds(184, 0, 89, 23);
+		panel.add(button);
+		
 		textField = new JTextField();
-		textField.setBounds(105, 107, 365, 31);
-		frame.getContentPane().add(textField);
 		textField.setColumns(10);
+		textField.setBounds(103, 63, 365, 31);
+		panel.add(textField);
 		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) 
-			{
-				String text=textField.getText();
-				JOptionPane.showMessageDialog(null, text);
-			}
-		});
-		btnNewButton.setBounds(238, 187, 89, 23);
-		frame.getContentPane().add(btnNewButton);
+		JRadioButton radioButton = new JRadioButton("Female");
+		radioButton.setSelected(true);
+		radioButton.setBounds(103, 205, 109, 23);
+		panel.add(radioButton);
 		
-		JRadioButton FemalRb = new JRadioButton("Female");
-		FemalRb.setSelected(true);
-		buttonGroup.add(FemalRb);
-		FemalRb.setBounds(60, 249, 109, 23);
-		frame.getContentPane().add(FemalRb);
+		JRadioButton radioButton_1 = new JRadioButton("Male");
+		radioButton_1.setBounds(103, 244, 109, 23);
+		panel.add(radioButton_1);
 		
-		JRadioButton MaleRb = new JRadioButton("Male");
-		buttonGroup.add(MaleRb);
-		MaleRb.setBounds(60, 288, 109, 23);
-		frame.getContentPane().add(MaleRb);
+		JButton button_1 = new JButton("New button");
+		button_1.setBounds(98, 305, 89, 23);
+		panel.add(button_1);
 		
-		JButton btnNewButton_1 = new JButton("New button");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e)
-			{
-				if(MaleRb.isSelected())
-				{
-					JOptionPane.showMessageDialog(null, "male");
-				}
-				else
-				{
-					JOptionPane.showMessageDialog(null, "female");
-				}
-			}
-		});
-		btnNewButton_1.setBounds(55, 349, 89, 23);
-		frame.getContentPane().add(btnNewButton_1);
+		JButton button_2 = new JButton("New button");
+		button_2.setBounds(281, 143, 89, 23);
+		panel.add(button_2);
 		
-		JCheckBox th = new JCheckBox("Thukpa");
-		th.setBounds(306, 249, 97, 23);
-		frame.getContentPane().add(th);
+		JCheckBox checkBox = new JCheckBox("Thukpa");
+		checkBox.setBounds(349, 205, 97, 23);
+		panel.add(checkBox);
 		
-		JCheckBox ch = new JCheckBox("Chowmien");
-		ch.setBounds(306, 288, 97, 23);
-		frame.getContentPane().add(ch);
+		JCheckBox checkBox_1 = new JCheckBox("Chowmien");
+		checkBox_1.setBounds(349, 244, 97, 23);
+		panel.add(checkBox_1);
 		
-		JCheckBox mo = new JCheckBox("momo");
-		mo.setBounds(306, 331, 97, 23);
-		frame.getContentPane().add(mo);
+		JCheckBox checkBox_2 = new JCheckBox("momo");
+		checkBox_2.setBounds(349, 287, 97, 23);
+		panel.add(checkBox_2);
 		
-		JButton btnNewButton_2 = new JButton("New button");
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
-								
-				StringBuilder sb= new StringBuilder();
-				
-				
-				ArrayList<String> items= new ArrayList<String>();
-			
-				String comma="";
-				
-				if(ch.isSelected())
-				{
-					sb.append("Chowmien");
-					items.add("Chowmien");
-				}
-				if(mo.isSelected())
-				{
-					sb.append("MoMo");
-					items.add("MoMo");
-				}
-				if(th.isSelected())
-				{
-					sb.append("Thukpa");
-					items.add("Thukpa");
-				}
-				
-				StringBuilder sb1= new StringBuilder();
-				int count=items.size();
-				int x=0;
-				for (String item : items) {
-					x++;
-					sb1.append(item);
-					
-					comma=count>1  ?   ","  : ".";
-					
-					if(count>1)
-					{
-						comma=";";
-					}
-					else
-					{
-						comma="";
-					}
-					
-					if(x==count)
-					{
-						comma=".";
-					}
-					sb1.append(comma);
-				}
-				String msg="You have ordered "+sb1.toString();
-				JOptionPane.showMessageDialog(null, msg);
-			}
-		});
-		btnNewButton_2.setBounds(306, 383, 89, 23);
-		frame.getContentPane().add(btnNewButton_2);
+		JButton button_3 = new JButton("New button");
+		button_3.setBounds(349, 339, 89, 23);
+		panel.add(button_3);
+		
+		JPanel panel_1 = new JPanel();
+		tabbedPane.addTab("New tab", null, panel_1, null);
+		
+		JPanel panel_2 = new JPanel();
+		tabbedPane.addTab("New tab", null, panel_2, null);
 	}
 }
