@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 
 import net.proteanit.sql.DbUtils;
+import pojo.Student;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -18,17 +19,21 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+
+import business.StudentLogic;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class StudentWindow {
+public class StudentWindow1 {
 
 	private JFrame frame;
 	private JTable table;
 	private JTextField stext;
 	private JTextField atext;
+	private StudentLogic sl= new StudentLogic();
 
 	/**
 	 * Launch the application.
@@ -37,7 +42,7 @@ public class StudentWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					StudentWindow window = new StudentWindow();
+					StudentWindow1 window = new StudentWindow1();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -49,7 +54,7 @@ public class StudentWindow {
 	/**
 	 * Create the application.
 	 */
-	public StudentWindow() {
+	public StudentWindow1() {
 		initialize();
 		
 	}
@@ -135,15 +140,16 @@ public void getselectedrow(int id) {
 			public void actionPerformed(ActionEvent arg0) 
 			{
 				try {
-				String sname=stext.getText();
-				int aid= Integer.parseInt(atext.getText());
+					Student s= new Student();
+				s.setStudentName(stext.getText());
+			    s.setAddressId(Integer.parseInt(atext.getText()));
 				if(mid!=0)
 				{
 					updatedata();
 				}
 				else
 				{
-				insertdata(sname,aid);
+				sl.AddStudent(s);
 				}
 				}
 				catch (Exception e) {
@@ -203,34 +209,7 @@ public void getselectedrow(int id) {
 			System.out.println(e.getMessage());
 		}
 	}
-	public void insertdata(String sname,int aid)
-	{
-		try {
-			String url="jdbc:mysql://localhost:3306/school?useSSL=false";
-			String driver="com.mysql.cj.jdbc.Driver";
-			Class.forName(driver); // import sql driver which is in jar file
-			Connection con= DriverManager.getConnection(url,"root",""); // url for mysql database
-			String sql="insert into student(studentname,addressid) values(?,?)";
-			
-			PreparedStatement stmt= con.prepareStatement(sql);
-			stmt.setString(1, sname);
-			stmt.setInt(2, aid);
-			int result= stmt.executeUpdate();
-			con.close();
-			if(result==1)
-			{
-				JOptionPane.showMessageDialog(null, "success");
-				getdata();
-			}
-			else
-			{
-				JOptionPane.showMessageDialog(null, "problem");
-			}
-		}catch(Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
-	}
+	
 	public void updatedata()
 	{
 		try {
