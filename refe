@@ -1,0 +1,302 @@
+package window;
+
+import java.awt.EventQueue;
+import java.util.ArrayList;
+
+import javax.swing.JFrame;
+
+import database.StudentDao;
+import net.proteanit.sql.DbUtils;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.awt.event.ActionEvent;
+
+public class Studentms {
+
+	private JFrame frame;
+	StudentDao d= new StudentDao();
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Studentms window = new Studentms();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Studentms() {
+		initialize();
+	}
+
+	JComboBox comboBox = new JComboBox();
+	private JTable table;
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 537, 396);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		comboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				int grade=Integer.parseInt(comboBox.getSelectedItem().toString());
+				
+				ResultSet srow= d.GetStudentsByGrade(grade);
+				table.setModel(DbUtils.resultSetToTableModel(srow));
+			}
+		});
+		
+		
+		comboBox.setBounds(47, 11, 135, 20);
+		frame.getContentPane().add(comboBox);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(40, 78, 290, 121);
+		frame.getContentPane().add(scrollPane);
+		
+		table = new JTable();
+		scrollPane.setViewportView(table);
+		getgrades();
+	}
+	
+	public void getgrades()
+	{
+	 ArrayList<String> grades=	d.GetGrades();
+	 DefaultComboBoxModel cm= new DefaultComboBoxModel(grades.toArray());	 
+	 comboBox.setModel(cm);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+package collection;
+
+import java.util.ArrayList;
+
+public class Alist {
+
+	public static void main(String[] args) {
+		
+		ArrayList<String> names= new ArrayList<String>();
+		names.add("ram");
+		names.add("shyam");
+		names.add("hari");
+		names.add("kris");
+		names.add("bikash");
+		for (int i = 0; i < names.size(); i++)
+		{
+		System.out.println(names.get(i));	
+		}
+		
+		for(String x:names)
+		{
+			System.out.println(x);
+		}
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+package database;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.proteanit.sql.DbUtils;
+import pojo.Student;
+
+public class StudentDao {
+	public StudentDao() {
+		try {
+			getconnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public String driver = "com.mysql.cj.jdbc.Driver";
+	public Connection Con = null;
+	public PreparedStatement st;
+	public String url = "jdbc:mysql://localhost:3306/school?useSSL=false";
+
+	public void getconnection() throws SQLException {
+		try {
+			Class.forName(driver);
+
+			Con = DriverManager.getConnection(url, "root", "");
+
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+public ResultSet GetAllStudents()
+{
+	String sql = "select * from student";
+	PreparedStatement st;
+	ResultSet rs = null;
+	try {
+		st = Con.prepareStatement(sql);
+		rs = st.executeQuery();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+	
+	return rs;
+	
+}
+public ResultSet GetStudentById(int id)
+{
+	String sql = "select * from student where studentid=?";
+	PreparedStatement st;
+	ResultSet rs = null;
+	try {
+		st = Con.prepareStatement(sql);
+		st.setInt(1, id);
+		rs = st.executeQuery();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+	
+	return rs;
+	
+}
+public int UpdateStudent(Student s)
+{
+	int result = 0;
+	try {
+		String sql = "update student set studentname=?, roll=?,grade=? where studentid=?";
+		PreparedStatement st = Con.prepareStatement(sql);
+		st.setString(1, s.getStudentname());
+		st.setString(2, s.getRoll());
+		st.setString(3, s.getGrade());
+		st.setInt(4, s.getStudentid());
+		result = st.executeUpdate();
+
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+
+	}
+	return result;
+}
+
+	public int insertstudent(Student s)  {
+		int result = 0;
+		try {
+			String sql = "insert into student(studentname,roll,grade)values(?,?,?)";
+			PreparedStatement st = Con.prepareStatement(sql);
+			st.setString(1, s.getStudentname());
+			st.setString(2, s.getRoll());
+			st.setString(3, s.getGrade());
+			result = st.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		return result;
+	}
+	
+	public int deletestudent(int id)
+	{
+		int result = 0;
+		try {
+			String sql = "delete from student where studentid=?";
+			PreparedStatement st = Con.prepareStatement(sql);
+			st.setInt(1, id);
+			
+			result = st.executeUpdate();
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		return result;
+	}
+	public ArrayList<String> GetGrades() {
+		
+		String sql = "select * from grade";
+		PreparedStatement st;
+		ArrayList<String> grades= new ArrayList<String>();
+		ResultSet rs = null;
+		try {
+			st = Con.prepareStatement(sql);
+		
+			rs = st.executeQuery();
+			
+			while(rs.next())
+			{
+				grades.add(rs.getString("gradeid"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return grades;
+	}
+	public ResultSet GetStudentsByGrade(int grade) {
+		String sql = "select * from student where gradeid=?";
+		PreparedStatement st;
+		ResultSet rs = null;
+		try {
+			st = Con.prepareStatement(sql);
+			st.setInt(1, grade);
+			rs = st.executeQuery();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return rs;
+	}
+}
